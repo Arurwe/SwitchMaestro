@@ -1,0 +1,47 @@
+services:
+    php:
+        build:
+            context: .
+            target: base
+        depends_on:
+            - postgres
+            - redis
+    scheduler:
+        build:
+            context: .
+            target: base
+        depends_on:
+            - postgres
+            - php
+            - redis
+            
+    queue:
+        build:
+            context: .
+            target: base
+        depends_on:
+            - postgres
+            - php
+            - redis
+    postgres:
+        image: postgres:18
+    redis:
+        image: redis:7.4
+    api:
+      build:
+        context: ./api-python
+        dockerfile: Dockerfile
+        target: deploy 
+      depends_on:
+        - postgres
+        - redis
+    celery-worker:
+      build:
+        context: ./api-python
+        dockerfile: Dockerfile
+        target: deploy
+      command: ["celery", "-A", "app.worker.celery_app", "worker", "--loglevel=info"]
+      depends_on:
+        - redis
+        - postgres
+      restart: unless-stopped

@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+watchfiles
+
+sqlalchemy
+psycopg2-binary
+
+netmiko
+ntc-templates
+
+
+celery
+redis

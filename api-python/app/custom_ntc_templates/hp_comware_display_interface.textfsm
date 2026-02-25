@@ -1,0 +1,50 @@
+Value Required INTERFACE (\S+)
+Value LINE_STATUS (UP|DOWN|ADMINISTRATIVELY DOWN)
+Value PROTOCOL_STATUS (UP|DOWN|UP\(spoofing\))
+Value List IP_ADDRESS (\S+)
+Value MTU (\d+)
+Value L2MTU (\d+)
+Value List HW_ADDRESS ([a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4})
+Value DESCRIPTION (.*)
+Value BANDWIDTH (.*)
+Value DUPLEX (\S+)
+Value SPEED (\S+)
+Value PORT_LINK_TYPE (\S+)
+Value UNTAGGED_VLAN_ID (\d+|none|None)
+Value VLAN_NATIVE (\d+|none|None)
+Value TAGGED_VLANS_RAW (.*)
+Value UNTAGGED_VLANS_RAW (.*)
+Value PASSING_VLANS_RAW (.*)
+Value PERMITTED_VLANS_RAW (.*)
+
+Start
+  ^\s*${INTERFACE}\s*$$
+  ^\s*${INTERFACE}$$
+  ^\s*Current\s+state:\s+${LINE_STATUS}
+  ^\s*${INTERFACE}\s+current\s+state\s*:\s*${LINE_STATUS}
+  ^\s*Line\s+protocol\s+state:\s+${PROTOCOL_STATUS}
+  ^\s*Line\s+protocol\s+current\s+state:\s+${PROTOCOL_STATUS}
+  ^\s*Description:\s+${DESCRIPTION}
+  ^\s*Bandwidth:\s+${BANDWIDTH}
+  ^\s*Maximum\s+[Tt]ransmi\S+\s+[Uu]nit:\s+${MTU}
+  ^\s*The\sMaximum\s+Transmit\s+Unit\sis\s+${MTU}
+  ^\s*Maximum\s+frame\s+length:\s*${L2MTU}
+  ^\s*The\s+[Mm]aximum\s+[Ff]rame\s+[Ll]ength\s+is\s+${L2MTU}
+  ^\s*Internet\s+[Aa]ddress:\s+${IP_ADDRESS}
+  ^\s*Internet\s+[Aa]ddress\s+is\s+${IP_ADDRESS}
+  ^\s*IP\s+[Pp]acket\s+[Ff]rame\s+[Tt]ype\s*:[^,]+,?\s+[Hh]ardware\s+[Aa]ddress:\s+${HW_ADDRESS}
+  ^\s*IP\s+packet\s+frame\s+type:[^,]+,?\s+hardware\s+address:\s+${HW_ADDRESS}
+  ^\s*(\d+G?bps)-speed\s+mode,\s+${DUPLEX}\s+mode
+  ^\s*${SPEED},\s+${DUPLEX},\s+link\s+type
+  ^\s*PVID:\s+${VLAN_NATIVE}
+  ^\s*Port\s+link-type:\s+${PORT_LINK_TYPE}
+  ^\s*Untagged\s+VLAN\s+ID\s*:\s*${UNTAGGED_VLAN_ID}
+  ^\s+Tagged\s+VLAN\s+ID\s*:\s*${TAGGED_VLANS_RAW}
+  ^\s+Untagged\s+VLAN\s+ID\s*:\s*${UNTAGGED_VLANS_RAW}
+  ^\s+VLAN\s+[Pp]assing\s*:\s*${PASSING_VLANS_RAW}
+  ^\s+VLAN\s+permitted\s*:\s*${PERMITTED_VLANS_RAW}
+  ^\s{2,}${TAGGED_VLANS_RAW} -> Continue
+  ^\s{2,}${UNTAGGED_VLANS_RAW} -> Continue
+  ^\s{2,}${PASSING_VLANS_RAW} -> Continue
+  ^\s{2,}${PERMITTED_VLANS_RAW} -> Continue
+  ^\s*$$ -> Record

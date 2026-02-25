@@ -1,0 +1,4 @@
+Template, Hostname, Platform, Command
+
+hp_comware_display_vlan_all.textfsm, .*, hp_comware, display vlan all
+
